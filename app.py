@@ -50,9 +50,9 @@ previous_harmful_params = []
 # ================= Email Alert SysteEREm =================
 def _send_email_task(email_type, status, ml_status, harmful_params, message, sensor_data, timestamp):
     """Background worker function attempting to dispatch the email via Gmail SMTP."""
-    sender = "rohithreddy2577@gmail.com"
-    recipient = "guvvala.rohithreddy2024@vitstudent.ac.in"
-    password = "rraw airs gmrc ynyv"
+    sender = os.environ.get("EMAIL_SENDER")
+    recipient = os.environ.get("EMAIL_RECEIVER")
+    password = os.environ.get("EMAIL_PASSWORD")
     
     if email_type == "Automatic":
         subject = f"ALERT: [{status}] Hazardous Gas Detected"
