@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hazardous Gas Monitoring System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* New style for the live system message banner */
+        .system-message {
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.5s ease;
+        }
+        .msg-safe { border-color: var(--safe); color: var(--safe); box-shadow: 0 0 15px var(--safe-glow); }
+        .msg-warning { border-color: var(--warning); color: var(--warning); box-shadow: 0 0 15px var(--warning-glow); }
+        .msg-danger { border-color: var(--danger); color: var(--danger); box-shadow: 0 0 15px var(--danger-glow); }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Gas Monitoring Dashboard</h1>
+            <div class="status-indicator">
+                <span class="status-dot safe" id="overall-status-dot"></span>
+                <span id="overall-status-text">System Normal</span>
+            </div>
+        </header>
+
+        <!-- Message Banner -->
+        <div id="system-alert-banner" class="system-message msg-safe">
+            Connecting to ESP32 API Backend...
+        </div>
+        
+        <!-- Manual Email Controls -->
+        <div style="text-align: center; margin-bottom: 25px;">
+            <button id="manual-email-btn" onclick="triggerManualEmail()" style="
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                color: #fff;
+                padding: 12px 24px;
+                font-size: 1rem;
+                font-weight: 600;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+                transition: transform 0.2s;
+            ">Send Current Status via Email</button>
+            <div id="email-success-text" style="display: none; color: #10b981; margin-top: 12px; font-weight: 700; font-size: 1.1rem; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);">Email sent successfully</div>
+        </div>
+
+        <main>
+            <section class="cards-grid">
+                <!-- CO2 Sensor -->
+                <div class="card glass-effect">
+                    <div class="card-header">
+                        <h2>CO2 Level</h2>
+                        <span class="badge safe" id="co2-badge">Safe</span>
+                    </div>
+                    <div class="value-display">
+                        <span id="co2-value">0</span> <span class="unit">ppm</span>
+                    </div>
+                    <div class="progress-bar">
+                        <!-- max 10000 for standard display -->
+                        <div class="progress safe" id="co2-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- LPG Sensor -->
+                <div class="card glass-effect">
+                    <div class="card-header">
+                        <h2>LPG Level</h2>
+                        <span class="badge safe" id="lpg-badge">Safe</span>
+                    </div>
+                    <div class="value-display">
+                        <span id="lpg-value">0</span> <span class="unit">ppm</span>
+                    </div>
+                    <div class="progress-bar">
+                        <!-- max 1000 -->
+                        <div class="progress safe" id="lpg-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Smoke Sensor -->
+                <div class="card glass-effect">
+                    <div class="card-header">
+                        <h2>Smoke Level</h2>
+                        <span class="badge safe" id="smoke-badge">Safe</span>
+                    </div>
+                    <div class="value-display">
+                        <span id="smoke-value">0</span> <span class="unit">ppm</span>
+                    </div>
+                    <div class="progress-bar">
+                        <!-- max 500 -->
+                        <div class="progress safe" id="smoke-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="env-grid">
+                <!-- Temperature -->
+                <div class="card small-card glass-effect">
+                    <h3>Temperature</h3>
+                    <div class="val"><span id="temp-value">--</span>°C</div>
+                </div>
+                <!-- Humidity -->
+                <div class="card small-card glass-effect">
+                    <h3>Humidity</h3>
+                    <div class="val"><span id="hum-value">--</span>%</div>
+                </div>
+                <!-- Soil Moisture -->
+                <div class="card small-card glass-effect">
+                    <h3>Soil Moisture</h3>
+                    <div class="val"><span id="moist-value">--</span>%</div>
+                </div>
+                <!-- Overall Status Prediction -->
+                <div class="card ml-card glass-effect">
+                    <h3>ESP32 Real-Time Status</h3>
+                    <div class="ml-status safe" id="ml-prediction">PENDING</div>
+                    <p>Live Hardware API Feed</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
